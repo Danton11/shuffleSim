@@ -1,0 +1,22 @@
+#!/bin/sh
+
+# Get a list of staged C files
+staged_c_files=$(git diff --cached --name-only | grep "\.c$")
+
+# Check if there are any staged C files
+if [ -n "$staged_c_files" ]; then
+  # Check for C code compilation errors
+  echo "Checking for C code compilation errors..."
+  gcc $staged_c_files -o /dev/null
+  if [ $? -ne 0 ]; then
+    echo "ERROR: Please fix the C code compilation errors and try again."
+    exit 1
+  fi
+
+  # Compilation tests passed
+  echo "Compilation tests passed."
+else
+  # No staged C files
+  echo "No staged C files, skipping C code compilation tests."
+fi
+
