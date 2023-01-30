@@ -15,8 +15,6 @@ class Card: # card object with a value and suit, i.e (3,hearts)
                 self.value = 'King'
             case _:
                 self.value = value
-            
-
         self.suit = suit
 
 
@@ -58,7 +56,6 @@ def perfect_riffle_shuffle(deck):
     # Split the deck into two halves
     deck, second_deck = deck[:middle_point], deck[middle_point:] # first card up to middle point, middle to the last card
 
-
     # Take elements from the second deck and add them to the correct place in the first deck
     for index, item in enumerate(second_deck):
 
@@ -66,7 +63,6 @@ def perfect_riffle_shuffle(deck):
         insert_index = index*2 + 1 
         
         deck.insert(insert_index, item)
-
     return deck
 
 
