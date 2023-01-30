@@ -3,88 +3,86 @@
 #include <time.h>
 
 #define NUM_SUITS 4
-#define NUM_RANKS 13
-#define DECK_SIZE (NUM_SUITS * NUM_RANKS)
+#define CARDS_IN_SUIT 13
+#define NUM_CARDS (NUM_SUITS * CARDS_IN_SUIT)
 
-const char *suits[] = {"clubs", "spades", "diamonds", "hearts"};
-const char *ranks[] = {"2", "3", "4", "5", "6", "7", "8", "9", "10", "Jack", "Queen", "King", "Ace"};
+const char *suits[] = {"Clubs", "Spades", "Diamonds", "Hearts"};
+const char *ranks[] = {"Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine", "Ten", "Jack", "Queen", "King", "Ace"};
 
-// Card object
 typedef struct
 {
     int suit;
     int rank;
 } Card;
 
-// Initialize deck of cards in order
-void initializeDeck(Card *deck)
+// Create a new deck of cards
+Card *create_deck()
 {
-    int i, j;
-    for (i = 0; i < NUM_SUITS; i++)
+    Card *deck = (Card *)malloc(NUM_CARDS * sizeof(Card));
+    int i = 0;
+    for (int s = 0; s < NUM_SUITS; s++)
     {
-        for (j = 0; j < NUM_RANKS; j++)
+        for (int r = 0; r < CARDS_IN_SUIT; r++)
         {
-            deck[i * NUM_RANKS + j].suit = i;
-            deck[i * NUM_RANKS + j].rank = j;
+            deck[i].suit = s;
+            deck[i].rank = r;
+            i++;
         }
     }
+    return deck;
 }
 
-// Perform non-perfect riffle shuffle
-void nonPerfectRiffleShuffle(Card *deck)
+// Display the deck of cards
+void display_deck(Card *deck)
 {
-    int i, j;
-    Card tempDeck[DECK_SIZE];
-    int deckIndex = 0;
-    int halfDeckSize = DECK_SIZE / 2;
-
-    // Split deck into two halves
-    for (i = 0; i < halfDeckSize; i++)
-    {
-        tempDeck[deckIndex++] = deck[i];
-        tempDeck[deckIndex++] = deck[i + halfDeckSize];
-    }
-
-    // Interleave cards randomly
-    for (i = 0; i < DECK_SIZE; i++)
-    {
-        int randomIndex = rand() % (deckIndex--);
-        deck[i] = tempDeck[randomIndex];
-        for (j = randomIndex; j < deckIndex; j++)
-        {
-            tempDeck[j] = tempDeck[j + 1];
-        }
-    }
-}
-
-// Print deck of cards
-void printDeck(Card *deck)
-{
-    int i;
-    for (i = 0; i < DECK_SIZE; i++)
+    for (int i = 0; i < NUM_CARDS; i++)
     {
         printf("%s of %s\n", ranks[deck[i].rank], suits[deck[i].suit]);
     }
 }
 
-int main()
+// Free the memory used by the deck
+void free_deck(Card *deck)
+{
+    free(deck);
+}
+
+// Perform a non-perfect riffle shuffle
+void shuffle(Card *deck)
 {
     srand(time(NULL));
+    int half = NUM_CARDS / 2;
+    int shuffle_index = 0;
+    Card *shuffled_deck = (Card *)malloc(NUM_CARDS * sizeof(Card));
+    for (int i = 0; i < half; i++)
+    {
+        if (rand() % 2 == 0)
+        {
+            shuffled_deck[shuffle_index++] = deck[i];
+            shuffled_deck[shuffle_index++] = deck[i + half];
+        }
+        else
+        {
+            shuffled_deck[shuffle_index++] = deck[i + half];
+            shuffled_deck[shuffle_index++] = deck[i];
+        }
+    }
+    for (int i = 0; i < NUM_CARDS; i++)
+    {
+        deck[i] = shuffled_deck[i];
+    }
+    free(shuffled_deck);
+}
 
-    // Allocate memory for deck of cards
-    Card *deck = (Card *)malloc(DECK_SIZE * sizeof(Card));
-
-    // Initialize deck of cards
-    initializeDeck(deck);
-
-    // Perform non-perfect riffle shuffle
-    nonPerfectRiffleShuffle(deck);
-
-    // Print deck of cards
-    printDeck(deck);
-
-    // Free memory
-    free(deck);
-
+int main()
+{
+    Card *deck = create_deck();
+    printf("Original deck:\n");
+    display_deck(deck);
+    printf("\n");
+    shuffle(deck);
+    printf("Shuffled deck:\n");
+    display_deck(deck);
+    free_deck(deck);
     return 0;
 }
