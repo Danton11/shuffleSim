@@ -89,3 +89,57 @@ if __name__ == '__main__':
         print(f"{card.value} of {card.suit}")
 
 
+
+
+
+# Testing 
+
+class RiffleTestCase(unittest.TestCase):
+    def test_perfect_riffle_shuffle(self):
+        """
+        Tests the perfect_riffle_shuffle function with a simple deck of cards.
+        """
+        riffleEight = perfect_riffle_shuffle(perfect_riffle_shuffle(perfect_riffle_shuffle(perfect_riffle_shuffle(
+            perfect_riffle_shuffle(perfect_riffle_shuffle(perfect_riffle_shuffle(perfect_riffle_shuffle(ordered_deck))))))))
+        # eight perfect riffle shuffles on any deck generates the oringal deck
+        self.assertEqual(ordered_deck, riffleEight)
+
+        # Create a deck of cards as a list of integers from 1 to 10
+        deck = list(range(1, 11))
+
+        # Call the perfect_riffle_shuffle function with the deck
+        shuffled_deck = perfect_riffle_shuffle(deck)
+
+        # Assert that the original deck and the shuffled deck are not equal
+        self.assertNotEqual(deck, shuffled_deck)
+
+        # Assert that the lengths of the original deck and the shuffled deck are equal
+        self.assertEqual(len(deck), len(shuffled_deck))
+
+        # Assert that the shuffled deck satisfies the perfect riffle shuffle pattern
+        for i in range(len(deck)//2):
+            self.assertEqual(shuffled_deck[2*i], deck[i])
+            self.assertEqual(shuffled_deck[2*i + 1], deck[i + len(deck)//2])
+
+    def test_non_perfect_riffle_shuffle(self):
+        """
+        Tests the non_perfect_riffle_shuffle function with a simple deck of cards.
+        """
+        # Create a deck of cards as a list of integers from 1 to 10
+        deck = list(range(1, 11))
+
+        # Call the non_perfect_riffle_shuffle function with the deck
+        shuffled_deck = non_perfect_riffle_shuffle(deck)
+
+        # Assert that the original deck and the shuffled deck are not equal
+        self.assertNotEqual(deck, shuffled_deck)
+
+        # Assert that the lengths of the original deck and the shuffled deck are equal
+        self.assertEqual(len(deck), len(shuffled_deck))
+
+        # Assert that all elements in the original deck are in the shuffled deck and vice versa
+        self.assertCountEqual(deck, shuffled_deck)
+
+
+
+unittest.main()
