@@ -2,7 +2,7 @@
 
 ## Shuffle Repository
 
-This repository contains several programs that perform either a perfect or non-perfect riffle shuffle of a deck of cards. Each program is written in a different programming language, including Python, Rust, C, C++, Javascript, Java, and PHP.
+This repository contains several programs that perform either a perfect or non-perfect riffle shuffle of a deck of cards. Each program is written in a different programming language, including Python, Rust, C and Java
 
 ## Folders
 
