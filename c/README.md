@@ -39,7 +39,7 @@ Running the Program
 3. Run the following command to compile the program:
 
 ```bash
-gcc shuffle.c -o shuffle
+gcc main.c -o shuffle
 ```
 
 Run the following command to execute the compiled program:
