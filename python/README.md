@@ -21,18 +21,20 @@ Download and install the latest version of Python 3 from the official website.
 ## Linux
 
 Open Terminal and run the following command to install Python 3 and NumPy:
-''' bash
+
+```bash
 
 sudo apt-get install python3 python3-pip
 pip3 install numpy
 
-'''
+```
 
 ## Running the Program
 
 Open Terminal (MacOS/Linux) or Command Prompt (Windows).
 Navigate to the directory containing the Python program.
 Run the following command to execute the program:
-'''bash
+
+```bash
 python3 shuffle.py
-'''
+```
