@@ -25,7 +25,6 @@ Open Terminal and run the following command to install Python 3 and NumPy:
 ```bash
 
 sudo apt-get install python3 python3-pip
-pip3 install numpy
 
 ```
 
