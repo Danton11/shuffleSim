@@ -19,4 +19,110 @@ else
   # No staged C files
   echo "No staged C files, skipping C code compilation tests."
 fi
+#!/bin/bash
 
+# Check for syntax errors in .py files
+for file in $(git diff --cached --name-only | grep '.py$'); do
+  python -m py_compile "$file"
+  if [ $? -ne 0 ]; then
+    echo "Syntax error in $file"
+    exit 1
+  else 
+	echo "No syntax errors found in the staged python files..."	
+  fi
+done
+
+# Check for tab characters in .py files
+for file in $(git diff --cached --name-only | grep '.py$'); do
+  if grep -q -P '\t' "$file"; then
+    echo "Tab character found in $file"
+    exit 1
+  fi
+done
+
+# Check for trailing whitespace in .py files
+for file in $(git diff --cached --name-only | grep '.py$'); do
+  if grep -q -P '\s+$' "$file"; then
+    echo "Trailing whitespace found in $file"
+    exit 1
+  else
+    echo "No trailing whitespace found in $file"
+  fi
+done
+
+# Check for code complexity issues using radon
+radon cc -a .
+if [ $? -ne 0 ]; then
+  echo "radon code complexity check failed"
+  exit 1
+  else
+   echo "radon code complexity passed for staged files"
+fi
+
+# Check for syntax errors in .c files
+for file in $(git diff --cached --name-only | grep '.c$'); do
+  gcc -c "$file"
+  if [ $? -ne 0 ]; then
+    echo "Syntax error in $file"
+    exit 1
+  else
+    echo "No syntax errors found in C files..."
+  fi
+done
+
+# Check for Clang-tidy warnings in .c files
+for file in $(git diff --cached --name-only | grep '.c$'); do
+  clang-tidy "$file" --quiet
+  if [ $? -ne 0 ]; then
+    echo "Clang-tidy warnings in $file"
+    exit 1
+  else
+    echo "No Clang-tidy warnings in $file"
+  fi
+done
+
+# Check for address and undefined behavior sanitizers in .c files
+for file in $(git diff --cached --name-only | grep '.c$'); do
+  gcc -fsanitize=address -fsanitize=undefined "$file"
+  if [ $? -ne 0 ]; then
+    echo "Address or undefined behavior sanitizer error in $file"
+    exit 1
+  
+  fi
+done
+
+# Check for compilation errors in .rs files
+for file in $(git diff --cached --name-only | grep '.rs$'); do
+  cargo build
+  if [ $? -ne 0 ]; then
+    echo "Compilation error in $file"
+    exit 1
+  fi
+done
+
+# Check for Clippy warnings in .rs files
+for file in $(git diff --cached --name-only | grep '.rs$'); do
+  cargo clippy --quiet
+  if [ $? -ne 0 ]; then
+    echo "Clippy warnings in $file"
+    exit 1
+  fi
+done
+
+# Check for Rustfmt in .rs files
+for file in $(git diff --cached --name-only | grep '.rs$'); do
+  cargo fmt -- --check
+  if [ $? -ne 0 ]; then
+    echo "Rustfmt error in $file"
+    exit 1
+  fi
+done
+
+# Check for syntax errors in .java files
+for file in $(git diff --cached --name-only | grep '.java$'); do
+  javac "$file"
+  if [ $? -ne 0 ]; then
+    echo "Syntax error in $file"
+    exit 1
+  fi
+done
