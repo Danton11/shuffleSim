@@ -22,6 +22,7 @@ fi
 #!/bin/bash
 
 # Check for syntax errors in .py files
+echo "Performing python checks..."
 for file in $(git diff --cached --name-only | grep '.py$'); do
   python -m py_compile "$file"
   if [ $? -ne 0 ]; then
@@ -50,6 +51,7 @@ for file in $(git diff --cached --name-only | grep '.py$'); do
   fi
 done
 
+echo "Radon tests..."
 # Check for code complexity issues using radon
 radon cc -a .
 if [ $? -ne 0 ]; then
@@ -59,6 +61,7 @@ if [ $? -ne 0 ]; then
    echo "radon code complexity passed for staged files"
 fi
 
+echo "C tests..."
 # Check for syntax errors in .c files
 for file in $(git diff --cached --name-only | grep '.c$'); do
   gcc -c "$file"
@@ -91,6 +94,7 @@ for file in $(git diff --cached --name-only | grep '.c$'); do
   fi
 done
 
+echo "Rust checks..."
 # Check for compilation errors in .rs files
 for file in $(git diff --cached --name-only | grep '.rs$'); do
   cargo build
@@ -118,6 +122,7 @@ for file in $(git diff --cached --name-only | grep '.rs$'); do
   fi
 done
 
+echo "Java tests..."
 # Check for syntax errors in .java files
 for file in $(git diff --cached --name-only | grep '.java$'); do
   javac "$file"
