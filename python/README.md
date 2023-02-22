@@ -6,7 +6,7 @@ This folder contains the Python program for performing either a perfect or non-p
 
 The following dependencies are required to run the Python program:
 
-- Python 3.10
+- Python 3.10 (due to match case statements)
 
 # Installation
 
